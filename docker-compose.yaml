@@ -1,13 +1,14 @@
 services:
   obsidian:
-    image: 'docker.io/oleduc/docker-obsidian-livesync-couchdb:master'
-    container_name: couchdb-obsidian-livesync
-    restart: always
+    image: 'couchdb:latest
+    container_name: couchdb-for-ols
+    user: 1000:1000
+    restart: unless-stopped
     environment:
       - SERVICE_FQDN_OBSIDIAN_5984
-      - SERVER_URL=${SERVICE_FQDN_OBSIDIAN}
       - COUCHDB_USER=${SERVICE_USER_OBSIDIAN}
       - COUCHDB_PASSWORD=${SERVICE_PASSWORD_OBSIDIAN}
-      - COUCHDB_DATABASE=${SERVICE_BASE64_OBSIDIAN}
     volumes:
-      - 'obsidian-couchdb:/opt/couchdb/data'
+      - obsidian-couchdb-data:/opt/couchdb/data
+      - obsidian-couchdb-data:/opt/couchdb/etc/local.d
+
