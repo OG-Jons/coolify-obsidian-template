@@ -1,7 +1,9 @@
 
 services:
   obsidian:
-    image: 'docker.io/oleduc/docker-obsidian-livesync-couchdb:master'
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: obsidian
     restart: always
     healthcheck:
