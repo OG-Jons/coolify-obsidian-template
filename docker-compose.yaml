@@ -4,6 +4,11 @@ services:
     container_name: couchdb-for-ols
     user: 1000:1000
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5984/_up"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
     environment:
       - SERVICE_FQDN_OBSIDIAN_5984
       - COUCHDB_USER=${SERVICE_USER_OBSIDIAN}
