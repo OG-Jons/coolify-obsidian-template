@@ -9,8 +9,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    ports:
+      - "5984:5984"
     environment:
-      - SERVICE_FQDN_OBSIDIAN_5984
       - COUCHDB_USER=${SERVICE_USER_OBSIDIAN}
       - COUCHDB_PASSWORD=${SERVICE_PASSWORD_OBSIDIAN}
     volumes:
