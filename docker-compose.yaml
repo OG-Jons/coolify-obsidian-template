@@ -1,7 +1,6 @@
 services:
   obsidian:
     image: 'couchdb:latest'
-    container_name: couchdb-for-ols
     user: 1000:1000
     restart: unless-stopped
     healthcheck:
@@ -12,6 +11,7 @@ services:
     ports:
       - "5984:5984"
     environment:
+      - SERVICE_FQDN_OBSIDIAN_5984
       - COUCHDB_USER=${SERVICE_USER_OBSIDIAN}
       - COUCHDB_PASSWORD=${SERVICE_PASSWORD_OBSIDIAN}
     volumes:
