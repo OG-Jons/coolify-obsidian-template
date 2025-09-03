@@ -1,20 +1,19 @@
+
 services:
   obsidian:
-    image: 'couchdb:latest'
-    user: 1000:1000
-    restart: unless-stopped
+    image: 'docker.io/oleduc/docker-obsidian-livesync-couchdb:master'
+    container_name: obsidian
+    restart: always
     healthcheck:
       test: ["CMD", "curl", "-f", "http://127.0.0.1:5984/_up"]
       interval: 30s
       timeout: 10s
       retries: 3
-    ports:
-      - "5984:5984"
     environment:
       - SERVICE_FQDN_OBSIDIAN_5984
+      - SERVER_URL=${SERVICE_FQDN_OBSIDIAN}
       - COUCHDB_USER=${SERVICE_USER_OBSIDIAN}
       - COUCHDB_PASSWORD=${SERVICE_PASSWORD_OBSIDIAN}
+      - COUCHDB_DATABASE=${SERVICE_BASE64_OBSIDIAN}
     volumes:
-      - obsidian-couchdb-data:/opt/couchdb/data
-      - obsidian-couchdb-data:/opt/couchdb/etc/local.d
-
+      - 'obsidian-couchdb:/opt/couchdb/data'
