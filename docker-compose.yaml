@@ -1,21 +1,26 @@
+# For details and other explanations about this file refer to:
+# https://github.com/vrtmrz/obsidian-livesync/blob/main/docs/setup_own_server.md#traefik
 
 services:
-  obsidian:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: obsidian
-    restart: always
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:5984/_up"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+  couchdb:
+    image: couchdb:latest
+    container_name: obsidian-livesync
+    user: 1000:1000
     environment:
       - SERVICE_FQDN_OBSIDIAN_5984
-      - SERVER_URL=${SERVICE_FQDN_OBSIDIAN}
-      - COUCHDB_USER=${SERVICE_USER_OBSIDIAN}
-      - COUCHDB_PASSWORD=${SERVICE_PASSWORD_OBSIDIAN}
-      - COUCHDB_DATABASE=${SERVICE_BASE64_OBSIDIAN}
+      - 'SERVER_URL=${SERVICE_FQDN_OBSIDIAN}'
+      - 'COUCHDB_USER=${SERVICE_USER_OBSIDIAN}'
+      - 'COUCHDB_PASSWORD=${SERVICE_PASSWORD_OBSIDIAN}'
     volumes:
-      - 'obsidian-couchdb:/opt/couchdb/data'
+      - ./data:/opt/couchdb/data
+      - ./local.ini:/opt/couchdb/etc/local.ini
+    restart: unless-stopped
+    labels:
+      - "traefik.http.routers.obsidian-livesync.middlewares=obsidiancors"
+      # The part needed for CORS to work on Traefik 2.x starts here
+      - "traefik.http.middlewares.obsidiancors.headers.accesscontrolallowmethods=GET,PUT,POST,HEAD,DELETE"
+      - "traefik.http.middlewares.obsidiancors.headers.accesscontrolallowheaders=accept,authorization,content-type,origin,referer"
+      - "traefik.http.middlewares.obsidiancors.headers.accesscontrolalloworiginlist=app://obsidian.md,capacitor://localhost,http://localhost"
+      - "traefik.http.middlewares.obsidiancors.headers.accesscontrolmaxage=3600"
+      - "traefik.http.middlewares.obsidiancors.headers.addvaryheader=true"
+      - "traefik.http.middlewares.obsidiancors.headers.accessControlAllowCredentials=true"
