@@ -7,7 +7,7 @@ services:
       - 'COUCHDB_USER=${SERVICE_USER_OBSIDIAN}'
       - 'COUCHDB_PASSWORD=${SERVICE_PASSWORD_OBSIDIAN}'
     volumes:
-      - obsidian-data:/opt/couchdb/data
+      - /home/jonas/obsidian/data:/opt/couchdb/data
       - /home/jonas/obsidian/local.ini:/opt/couchdb/etc/local.ini
     # Ports not needed when already passed to Traefik
     #ports:
@@ -36,9 +36,7 @@ services:
       - "traefik.http.middlewares.obsidiancors.headers.accesscontrolmaxage=3600"
       - "traefik.http.middlewares.obsidiancors.headers.addvaryheader=true"
       - "traefik.http.middlewares.obsidiancors.headers.accessControlAllowCredentials=true"
-volumes:
-    obsidian-data:
-      device: /home/jonas/obsidian/data # Re-uses the variable
+
 networks:
   coolify:
     external: true
