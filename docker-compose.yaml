@@ -7,8 +7,8 @@ services:
       - 'COUCHDB_USER=${SERVICE_USER_OBSIDIAN}'
       - 'COUCHDB_PASSWORD=${SERVICE_PASSWORD_OBSIDIAN}'
     volumes:
-      - /home/jonas/obsidian/data:/opt/couchdb/data
-      - /home/jonas/obsidian/local.ini:/opt/couchdb/etc/local.ini
+      - /home/jonas/obsidian/couchdb-data:/opt/couchdb/data
+      - /home/jonas/obsidian/couchdb-etc:/opt/couchdb/etc/local.d
     # Ports not needed when already passed to Traefik
     #ports:
     #  - 5984:5984
